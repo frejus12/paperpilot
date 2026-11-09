@@ -13,7 +13,7 @@ def client():
 
 
 @retry(stop=stop_after_attempt(4), wait=wait_exponential(multiplier=1, min=1, max=20))
-def complete(system: str, user: str, max_tokens: int = 1200) -> str:
+def _complete_with_retry(system: str, user: str, max_tokens: int) -> str:
     msg = client().messages.create(
         model=settings.llm_model,
         max_tokens=max_tokens,
@@ -21,6 +21,13 @@ def complete(system: str, user: str, max_tokens: int = 1200) -> str:
         messages=[{"role": "user", "content": user}],
     )
     return "".join(b.text for b in msg.content if b.type == "text")
+
+
+def complete(system: str, user: str, max_tokens: int = 1200) -> str:
+    text = _complete_with_retry(system, user, max_tokens)
+    if not text:
+        raise RuntimeError("The language model returned no text.")
+    return text
 
 
 def stream(system: str, user: str, max_tokens: int = 1200):
