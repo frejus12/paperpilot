@@ -1,4 +1,4 @@
-pymupdf==2.1
+pymupdf==1.28.2
 chromadb==1.5.9
 sentence-transformers==6.2.0
 anthropic==2.4.0

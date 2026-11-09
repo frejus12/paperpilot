@@ -38,3 +38,14 @@ requests to FastAPI.
 
 The local data directory (`data/`) is gitignored. Run the tests with
 `pytest`.
+
+To run the UI and API together with Docker Compose, make sure `.env` exists and
+contains the required settings, then run:
+
+```bash
+docker compose up --build
+```
+
+Open the UI at `http://localhost:8501`. The API is available at
+`http://localhost:8000`; inside Compose, the UI connects to the API using the
+`api` service name.
